@@ -16,7 +16,7 @@ export const markdown = MarkdownIt({
   linkify: true,
 })
 
-markdown.disable(['image', 'link'])
+markdown.disable(['image'])
 
 export type CommentWrapper = {
   commentCount: number
