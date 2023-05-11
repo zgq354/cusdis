@@ -1,4 +1,4 @@
-export default {
+window.CUSDIS_LOCALE_NEVER_USE = {
   powered_by: 'Comments powered by Cusdis',
   post_comment: 'Comment',
   loading: 'Loading',

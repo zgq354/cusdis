@@ -9,6 +9,7 @@ import { statService } from './stat.service'
 import { EmailService } from './email.service'
 import { TokenService } from './token.service'
 import { makeConfirmReplyNotificationTemplate } from '../templates/confirm_reply_notification'
+import gravatar from 'gravatar'
 import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 
@@ -27,6 +28,7 @@ export type CommentWrapper = {
 
 export type CommentItem = Comment & {
   page: Page
+  avatarUrl?: string;
 } & {
   replies: CommentWrapper
   parsedContent: string
@@ -84,7 +86,10 @@ export class CommentService extends RequestScopeService {
     } as Prisma.CommentWhereInput
 
     const baseQuery = {
-      select,
+      select: {
+        ...select,
+        by_email: true,
+      },
       where,
     }
 
@@ -118,15 +123,18 @@ export class CommentService extends RequestScopeService {
           select,
         })
 
-        const parsedCreatedAt = dayjs.utc(comment.createdAt).utcOffset(timezoneOffset).format(
+        const parsedCreatedAt = (timezoneOffset ? dayjs.utc(comment.createdAt).utcOffset(timezoneOffset) : dayjs.utc(comment.createdAt)).format(
           'YYYY-MM-DD HH:mm',
         )
         const parsedContent = markdown.render(comment.content) as string
+        const { by_email, ...rest } = comment;
+        const avatarUrl = gravatar.url(by_email, { protocol: 'https' }).replace('https://s.gravatar.com/avatar/', 'https://gravatar.loli.net/avatar/');
         return {
-          ...comment,
+          ...(options?.select?.by_email ? comment : rest),
           replies,
           parsedContent,
           parsedCreatedAt,
+          avatarUrl,
         } as CommentItem
       }),
     )

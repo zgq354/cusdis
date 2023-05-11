@@ -19,19 +19,24 @@
   class:cusdis-indicator={showIndicator}
 >
   <div class="flex items-center">
-    <div class="mr-2 font-medium dark:text-gray-100">
-      {comment.moderator && comment.moderator.displayName ? comment.moderator.displayName : comment.by_nickname}
-    </div>
-
-    {#if comment.moderatorId}
-      <div class="mr-2 dark:bg-gray-500 bg-gray-200 text-xs py-0.5 px-1 rounded dark:text-gray-100">
-        <span>{t('mod_badge')}</span>
+    <img class="w-9 h-9 rounded-full mr-2" src={comment.avatarUrl} alt="avatar">
+    <div>
+      <div class="flex items-center">
+        <div class="mr-2 font-medium dark:text-gray-100">
+          {comment.moderator && comment.moderator.displayName ? comment.moderator.displayName : comment.by_nickname}
+        </div>
+    
+        {#if comment.moderatorId}
+          <div class="mr-2 dark:bg-gray-500 bg-gray-200 text-xs py-0.5 px-1 rounded dark:text-gray-100">
+            <span>{t('mod_badge')}</span>
+          </div>
+        {/if}
       </div>
-    {/if}
-  </div>
 
-  <div class="text-gray-500 text-sm dark:text-gray-400">
-    {comment.parsedCreatedAt}
+      <div class="text-gray-500 text-sm dark:text-gray-400">
+        {comment.parsedCreatedAt}
+      </div>
+    </div>
   </div>
 
   <div class="text-gray-500 my-2 dark:text-gray-200">
